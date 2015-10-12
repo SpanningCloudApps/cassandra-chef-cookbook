@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe 'cassandra::opscenter_agent_datastax' do
+describe 'cassandra-dse::opscenter_agent_datastax' do
 
   let(:chef_run) do
 
     ChefSpec::SoloRunner.new(platform: 'centos', version: '6.4') do |node|
 
       node.set['cassandra']['cluster_name'] = 'test'
-      node.set['cassandra']['version'] = '2.0.11'
+      node.set['cassandra']['version'] = '2.1.7'
       node.set['cassandra']['install_java'] = true
       node.set['cassandra']['yum']['options'] = '--always-have-options'
 
@@ -17,7 +17,7 @@ describe 'cassandra::opscenter_agent_datastax' do
 
   it 'includes dependent recipes' do
     expect(chef_run).to include_recipe 'java'
-    expect(chef_run).to include_recipe 'cassandra::repositories'
+    expect(chef_run).to include_recipe 'cassandra-dse::repositories'
   end
 
   it 'installs the agent package' do
@@ -30,9 +30,7 @@ describe 'cassandra::opscenter_agent_datastax' do
   end
 
   it 'renders the agent config file' do
-    expect(chef_run).to create_template('/var/lib/datastax-agent/conf/address.yaml').with(
-      variables: { :server_ip => '0.0.0.0' }
-    )
+    expect(chef_run).to create_template('/var/lib/datastax-agent/conf/address.yaml')
   end
 
 end

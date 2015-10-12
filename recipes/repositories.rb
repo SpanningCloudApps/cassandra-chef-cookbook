@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: cassandra
+# Cookbook Name:: cassandra-dse
 # Recipe:: datastax
 #
 # Copyright 2011-2012, Michael S Klishin & Travis CI Development Team
@@ -28,7 +28,7 @@ end
 
 case node['platform_family']
 when 'debian'
-  package 'apt-transport-https' if node['cassandra']['dse']
+  package 'apt-transport-https'
 
   apt_repository node['cassandra']['apt']['repo'] do
     if node['cassandra']['dse']

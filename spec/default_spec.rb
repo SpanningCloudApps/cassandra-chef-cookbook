@@ -1,11 +1,8 @@
 require 'spec_helper'
 
-describe 'cassandra::default' do
-
+describe 'cassandra-dse::default' do
   shared_examples_for 'cassandra' do
-
     context 'all_platforms' do
-
       it 'enables cassandra service' do
         expect(chef_run).to enable_service('cassandra')
         expect(chef_run).to start_service('cassandra')
@@ -20,22 +17,18 @@ describe 'cassandra::default' do
             group: 'cassandra'
           )
         end # %w()
-
       end # it
     end
   end
 
+
   context 'Centos 6.4 - yum - dsc20' do
-
     let(:chef_run) do
-
       ChefSpec::SoloRunner.new(platform: 'centos', version: '6.4') do |node|
-
-        node.set['cassandra']['cluster_name'] = 'test'
+        node.set['cassandra']['config']['cluster_name'] = 'test'
         node.set['cassandra']['version'] = '2.0.11'
-
+        node.set['cassandra']['package_name'] = 'dsc20'
       end.converge(described_recipe)
-
     end
 
     include_examples 'cassandra'
@@ -72,27 +65,24 @@ describe 'cassandra::default' do
         group: 'cassandra'
       )
     end
-
   end
 
+
   context 'Centos 6.4 - yum - dsc21' do
-
     let(:chef_run) do
-
       ChefSpec::SoloRunner.new(platform: 'centos', version: '6.4') do |node|
 
-        node.set['cassandra']['cluster_name'] = 'test'
-        node.set['cassandra']['version'] = '2.1.0'
+        node.set['cassandra']['config']['cluster_name'] = 'test'
+        node.set['cassandra']['version'] = '2.1.7'
         node.set['cassandra']['package_name'] = 'dsc21'
 
       end.converge(described_recipe)
-
     end
 
     include_examples 'cassandra'
 
-    it 'installs cassandra dsc21 2.1.0-1' do
-      expect(chef_run).to install_yum_package('dsc21').with(version: '2.1.0-1')
+    it 'installs cassandra dsc21 2.1.7-1' do
+      expect(chef_run).to install_yum_package('dsc21').with(version: '2.1.7-1')
     end
 
     it 'Creates /usr/share/java dir' do
@@ -101,10 +91,6 @@ describe 'cassandra::default' do
 
     it 'Does NOT Create symlink between /usr/share/cassandra/lib/jna.jar and /usr/share/java/jna.jar' do
       expect(chef_run).to_not create_link('/usr/share/cassandra/lib/jna.jar').with(to: '/usr/share/java/jna.jar')
-    end
-
-    it 'Creates symlink between /usr/share/cassandra/lib/jamm-0.2.6.jar and /usr/share/java/jamm-0.2.6.jar' do
-      expect(chef_run).to create_link('/usr/share/cassandra/lib/jamm-0.2.6.jar').with(to: '/usr/share/java/jamm-0.2.6.jar')
     end
 
     it 'creates /etc/cassandra/conf/logback.xml' do
@@ -134,20 +120,16 @@ describe 'cassandra::default' do
         group: 'cassandra'
       )
     end
-
   end
 
+
   context 'Ubuntu 12.04 - apt - cassandra 2.0.11' do
-
     let(:chef_run) do
-
       ChefSpec::SoloRunner.new(platform: 'ubuntu', version: '12.04') do |node|
-
-        node.set['cassandra']['cluster_name'] = 'test'
+        node.set['cassandra']['config']['cluster_name'] = 'test'
         node.set['cassandra']['version'] = '2.0.11'
-
+        node.set['cassandra']['package_name'] = 'dsc20'
       end.converge(described_recipe)
-
     end
 
     include_examples 'cassandra'
@@ -188,7 +170,5 @@ describe 'cassandra::default' do
         group: 'cassandra'
       )
     end
-
   end
-
 end

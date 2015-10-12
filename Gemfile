@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rake'
 gem 'berkshelf'
 gem 'chefspec'
-gem 'foodcritic', :github => 'acrmp/foodcritic', :branch => 'master'
+gem 'foodcritic'
 gem 'rubocop'
 gem 'dep_selector', '1.0.3'
 
@@ -23,6 +23,7 @@ group :development do
   gem 'chef'
   gem 'knife-spork', '~> 1.0.17'
   gem 'knife-spec'
+  gem 'stove'
 end
 
 # Uncomment these lines if you want to live on the Edge:
