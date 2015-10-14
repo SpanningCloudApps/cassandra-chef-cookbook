@@ -19,9 +19,9 @@ def cassandra_yaml_config(c)
   config.delete('num_tokens') unless node['cassandra']['vnodes']
   # delete initial_token if vnodes is set
   config.delete('initial_token') if node['cassandra']['vnodes']
-  # remove row_cache_provider if row_cache_provider == SerializingCacheProvider
+  # remove row_cache_provider is row_cache_provider == SerializingCacheProvider
   config.delete('row_cache_provider') if config.key?('row_cache_provider') && config['row_cache_provider'] == 'SerializingCacheProvider'
-  # remove commitlog_sync_period_in_ms if commitlog_sync_batch_window_in_ms is not set
+  # remove commitlog_sync_period_in_ms is commitlog_sync_batch_window_in_ms is not set
   config.delete('commitlog_sync_period_in_ms') unless config.key?('commitlog_sync_batch_window_in_ms')
   # remove commitlog_sync_period_in_ms if commitlog_sync != periodic
   config.delete('commitlog_sync_period_in_ms') if config.key?('commitlog_sync') && config['commitlog_sync'] != 'periodic'
@@ -60,7 +60,7 @@ def discover_seed_nodes
       q = if search_query = node['cassandra']['seed_discovery']['search_query']
             search_query
           else
-            "chef_environment:#{node.chef_environment} AND role:#{node['cassandra']['seed_discovery']['search_role']} AND cassandra_cluster_name:#{node['cassandra']['config']['cluster_name']}"
+            "chef_environment:#{node.chef_environment} AND role:#{node['cassandra']['seed_discovery']['search_role']} AND cassandra_cluster_name:#{node['cassandra']['cluster_name']}"
           end
       Chef::Log.info("Will discover Cassandra seeds using query '#{q}'")
       xs = search(:node, q).map(&:ipaddress).sort.uniq
@@ -126,10 +126,10 @@ def tarball_sha256sum(version)
     '2.0.16' => 'c523deaaefd3450dcdda0d53e0f93243dd51b018ec32f6bca5c1f73a557dfbba', '2.0.2' => 'f65ed7821a2744a055535571923461c9ef8020242aac0a406f96e9f7cbce2819', '2.0.3' => '8129040b84ad086898f8a99680fd6eb54bb1ba81983d33f7217ec1ae0bb92607',
     '2.0.4' => 'f0be26d5a6a4e41fc5c0fdff8ecc4e5250c4a5cf45497904566f795bea1a2c35', '2.0.5' => '3b61ca8da88c6a14e4079b76de3052c53041ebb717a362f0d7489e775381e7c6', '2.0.6' => 'e7679bddb3029f87cf50936bc348cc07a9e6c557cd9a553aa69542d06a3d274a',
     '2.0.7' => '9ef94b58ab863d402f3827d5e98c7d01bf4ce02ec8383bdbf97218aced6694a7', '2.0.8' => '7d81ddf7e8ebe59ffa5ff5ace25171a56eb77404c9a5d1675a5031a17e85447e', '2.0.9' => '9cd8378235809007406d493e87ffa0e873b6868a2a7a351f7fbffe9614fa9845',
-    '2.1.0' => 'da99c4ebc8de925dc6b493443b70d2183cf3090b1aad6b6b918efa9565f264dd', '2.1.1' => 'e9d10c2ccc6124d516772e672aef61732f763ff326967dc7fbcc3f1123a29901', '2.1.2' => '995182b62aada179648146a8fdd6f61881b23a33e77fe92c666c1816dad897be',
-    '2.1.3' => 'df4ef06cd86c6c8a6bc1afee982279250a7a500aac20de55da48e43d0e3cebc3', '2.1.4' => 'fb5debada72905f169866ca43c21ade4782f9c036b160894e42b9072190cb7f1', '2.1.5' => '2d768e2fba9c576289e26247e2ed0b36fb802e06fa0a141783b765d63daf36ff',
-    '2.1.6' => 'c2123b9d82b57868ad03c57720d9f4c99934fe292d571242a3b51337063409f7', '2.1.7' => 'add1a34b8e07dacb16df6b8dbe50c66d77cb46b89f66424103e2fd4459b79089', '2.1.8' => '3a0cc64efd529ffdc1600f6b3ad1946af85cc01544e2b469499aa81b10b722f5',
-    '2.1.9' => '7a33598d3b06cfbf9fd1264f1ad03a03a3d2c716c2e941b79b134cd2e781dc82', '2.2.0' => '6405eb063e7c8a44a485ac12b305c00ad62c526cc021bcce145c29423ae7b0a2'
+    '2.1.0' => 'da99c4ebc8de925dc6b493443b70d2183cf3090b1aad6b6b918efa9565f264dd', '2.1.1' => 'e9d10c2ccc6124d516772e672aef61732f763ff326967dc7fbcc3f1123a29901', '2.1.10' => '1009bd71ad414d26fe6a64a54a5f6680eb83b66e0a5c86d48f7736038409eb32',
+    '2.1.2' => '995182b62aada179648146a8fdd6f61881b23a33e77fe92c666c1816dad897be', '2.1.3' => 'df4ef06cd86c6c8a6bc1afee982279250a7a500aac20de55da48e43d0e3cebc3', '2.1.4' => 'fb5debada72905f169866ca43c21ade4782f9c036b160894e42b9072190cb7f1',
+    '2.1.5' => '2d768e2fba9c576289e26247e2ed0b36fb802e06fa0a141783b765d63daf36ff', '2.1.6' => 'c2123b9d82b57868ad03c57720d9f4c99934fe292d571242a3b51337063409f7', '2.1.7' => 'add1a34b8e07dacb16df6b8dbe50c66d77cb46b89f66424103e2fd4459b79089',
+    '2.1.8' => '3a0cc64efd529ffdc1600f6b3ad1946af85cc01544e2b469499aa81b10b722f5', '2.2.0' => '6405eb063e7c8a44a485ac12b305c00ad62c526cc021bcce145c29423ae7b0a2'
   }
   sha256sum = sha256sums[version]
   fail "sha256sum is missing for cassandra tarball version #{sha256sum}" unless sha256sum
